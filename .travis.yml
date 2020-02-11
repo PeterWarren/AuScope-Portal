@@ -4,6 +4,9 @@ jdk:
 cache:
   directories:
   - "$HOME/.m2"
+before_install:
+- openssl aes-256-cbc -K $encrypted_45988503ad83_key -iv $encrypted_45988503ad83_iv
+  -in client-secret.json.enc -out client-secret.json -d
 deploy:
   provider: releases
   api_key:
@@ -13,3 +16,11 @@ deploy:
     repo: AuScope/AuScope-Portal
     tags: true
     branch: master
+  provider: gae
+  skip_cleanup: true
+  file: target/AuScope-Portal.war
+  on:
+    repo: PeterWarren/AuScope-Portal
+    branch: master
+  keyfile: client-secret.json
+  project: My Project 
